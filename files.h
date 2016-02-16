@@ -17,6 +17,6 @@ int multiply(int first, int second);
 
 int divide(int numerator, int denominator);
 
-std::vector<std::string> random(const int target, const std::vector<int> numbers, unsigned int cycles);
+std::vector<std::string> random(const int target, const std::vector<int> numbers);
 
 #endif

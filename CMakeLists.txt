@@ -3,5 +3,5 @@ project(countdown_answers)
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 
-set(SOURCE_FILES main.cpp steppers.cpp functions.cpp simple.cpp)
+set(SOURCE_FILES main.cpp steppers.cpp functions.cpp random.cpp)
 add_executable(countdown_answers ${SOURCE_FILES})

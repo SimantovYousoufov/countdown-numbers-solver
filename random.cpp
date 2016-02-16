@@ -4,10 +4,15 @@
 #include <array>
 #include "files.h"
 
-// Function point is of type int
+// Function pointer is of type int
 typedef int (*FnPtr)(int, int);
 
-std::vector<std::string> random(const int target, const std::vector<int> numbers, unsigned int cycles) {
+/*
+ * Solve Countdown with a random approach
+ */
+std::vector<std::string> random(const int target, const std::vector<int> numbers) {
+    unsigned int cycles = 0;
+
     // Keep a history of completed steps
     std::vector<std::string> completedSteps;
 
@@ -23,7 +28,6 @@ std::vector<std::string> random(const int target, const std::vector<int> numbers
 
     int currentPosition = 0;
 
-    // @todo this will include steps that don't matter, should ignore those
     // ignore steps that don't include the current position after the first loop through
     while (currentPosition != target) {
         std::vector<int> workingNumbers = numbers;
@@ -31,15 +35,13 @@ std::vector<std::string> random(const int target, const std::vector<int> numbers
         currentPosition = 0; // Reset current position
         workingNumbers.push_back(currentPosition);
 
-        bool currentPositionAdded = false;
-
-        while (currentPosition != target) {
+        while ((currentPosition != target) && (workingNumbers.size() > 1)) {
             int randKeyIndex = rand() % stepKeys.size();
             std::string key = stepKeys[randKeyIndex];
             FnPtr step = stepMap[key];
 
-            int firstIndex;
-            int secondIndex;
+            unsigned int firstIndex;
+            unsigned int secondIndex;
 
             if (currentPosition > 0) {
                 firstIndex = workingNumbers.size() - 1; // always last (current position)
@@ -47,13 +49,13 @@ std::vector<std::string> random(const int target, const std::vector<int> numbers
                 firstIndex = rand() % (workingNumbers.size());
             }
 
-            int firstNumber = workingNumbers[firstIndex];
+            unsigned int firstNumber = workingNumbers[firstIndex];
 
             do {
                 secondIndex = rand() % (workingNumbers.size());
             } while(firstIndex == secondIndex);
 
-            int secondNumber = workingNumbers[secondIndex];
+            unsigned int secondNumber = workingNumbers[secondIndex];
             workingNumbers.erase(workingNumbers.begin() + firstIndex);
 
             if (firstIndex > secondIndex) {
@@ -62,7 +64,11 @@ std::vector<std::string> random(const int target, const std::vector<int> numbers
                 workingNumbers.erase(workingNumbers.begin() + secondIndex - 1);
             }
 
-            workingNumbers.pop_back(); // Remove old current position
+            if (currentPosition == 0) {
+                // Remove old current position if this is the first inner iteration
+                workingNumbers.pop_back();
+            }
+
             currentPosition = step(firstNumber, secondNumber);
             workingNumbers.push_back(currentPosition); // update with the new current position
 
@@ -74,14 +80,9 @@ std::vector<std::string> random(const int target, const std::vector<int> numbers
 
             cycles++;
 
-            if (! currentPositionAdded) {
-                workingNumbers.push_back(currentPosition);
-                currentPositionAdded = true;
-            }
-
             if (target == currentPosition) {
                 // found it
-                std::cout << "found it in " << cycles << " cycles" << std::endl;
+                std::cout << "Solved in " << cycles << " cycles" << std::endl;
                 return completedSteps;
             } else if ((currentPosition > target) || (currentPosition < 0) || (workingNumbers.size() == 0)) {
                 // Didn't find it, start over
