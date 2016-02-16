@@ -48,10 +48,16 @@ std::vector<std::string> simple(const int target, const std::vector<int> numbers
             std::string key = stepKeys[randKeyIndex];
             FnPtr step = stepMap[key];
 
-            int firstIndex = rand() % (workingNumbers.size());
-            int firstNumber = workingNumbers[firstIndex];
-
+            int firstIndex;
             int secondIndex;
+
+            if (currentPosition > 0) {
+                firstIndex = workingNumbers.size() - 1; // always last (current position)
+            } else {
+                firstIndex = rand() % (workingNumbers.size());
+            }
+
+            int firstNumber = workingNumbers[firstIndex];
 
             do {
                 secondIndex = rand() % (workingNumbers.size());
@@ -95,7 +101,6 @@ std::vector<std::string> simple(const int target, const std::vector<int> numbers
             }
         }
 
-//        currentPosition = workingNumbers.back();
         std::cout << "Cycles: " << cycles << std::endl;
     }
 
