@@ -3,12 +3,6 @@
 
 #include <vector>
 
-int maxInt(int *numbers);
-
-int minInt(int *numbers);
-
-int randomInt(int min, int max);
-
 int add(int first, int second);
 
 int subtract(int first, int second);
