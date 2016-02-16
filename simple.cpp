@@ -7,7 +7,7 @@
 // Function point is of type int
 typedef int (*FnPtr)(int, int);
 
-std::vector<std::string> simple(const int target, const std::vector<int> numbers, unsigned int cycles) {
+std::vector<std::string> random(const int target, const std::vector<int> numbers, unsigned int cycles) {
     // Keep a history of completed steps
     std::vector<std::string> completedSteps;
 
@@ -33,17 +33,7 @@ std::vector<std::string> simple(const int target, const std::vector<int> numbers
 
         bool currentPositionAdded = false;
 
-        while (target != currentPosition) {
-            if (target == currentPosition) {
-                std::cout << "Found it" << std::endl;
-                // found it
-                return completedSteps;
-            } else if ((currentPosition > target) || (currentPosition < 0) || (workingNumbers.size() <= 1)) {
-                // Didn't find it, start over
-                std::cout << "Complex if 1" << std::endl;
-                break;
-            }
-
+        while (currentPosition != target) {
             int randKeyIndex = rand() % stepKeys.size();
             std::string key = stepKeys[randKeyIndex];
             FnPtr step = stepMap[key];
@@ -72,7 +62,6 @@ std::vector<std::string> simple(const int target, const std::vector<int> numbers
                 workingNumbers.erase(workingNumbers.begin() + secondIndex - 1);
             }
 
-            // @todo bad, this will pop the last one indiscriminantly
             workingNumbers.pop_back(); // Remove old current position
             currentPosition = step(firstNumber, secondNumber);
             workingNumbers.push_back(currentPosition); // update with the new current position
@@ -81,7 +70,7 @@ std::vector<std::string> simple(const int target, const std::vector<int> numbers
                 break; // made no progress or encountered an error
             }
 
-            completedSteps.push_back("" + std::to_string(firstNumber) + "|" + key + "|" + std::to_string(secondNumber));
+            completedSteps.push_back("" + std::to_string(firstNumber) + ' ' + key + ' ' + std::to_string(secondNumber));
 
             cycles++;
 
@@ -92,16 +81,13 @@ std::vector<std::string> simple(const int target, const std::vector<int> numbers
 
             if (target == currentPosition) {
                 // found it
-                std::cout << "found it" << std::endl;
+                std::cout << "found it in " << cycles << " cycles" << std::endl;
                 return completedSteps;
             } else if ((currentPosition > target) || (currentPosition < 0) || (workingNumbers.size() == 0)) {
                 // Didn't find it, start over
-                std::cout << "Complex if 2" << std::endl;
                 break;
             }
         }
-
-        std::cout << "Cycles: " << cycles << std::endl;
     }
 
     return completedSteps;
