@@ -11,10 +11,11 @@ typedef std::chrono::microseconds microseconds;
 
 int main() {
     srand(time(0));
+    int target = 767;
     std::vector<int> numbers = {100, 75, 50, 8, 6, 3};
 
     HRTimeVar start = std::chrono::high_resolution_clock::now();
-    std::vector<std::string> result = random(767, numbers);
+    std::vector<std::string> result = random(target, numbers);
     HRTimeVar end = std::chrono::high_resolution_clock::now();
 
     auto duration = std::chrono::duration_cast<microseconds>(end - start).count();
@@ -26,7 +27,7 @@ int main() {
             std::cout << " => ";
         }
     }
-    std::cout << std::endl;
+    std::cout << " to get " << target << std::endl;
 
     std::cout << "Total duration: " << duration * US_TO_S << " seconds" << std::endl;
 
